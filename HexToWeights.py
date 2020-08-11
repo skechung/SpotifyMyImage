@@ -1,6 +1,7 @@
 
 import numpy as py
 import cv2
+from collections import Counter
 
 #testing image path
 path = './test.jpg'
@@ -68,10 +69,10 @@ def getRGB(image):
 #takes in an array of pixel objects
 #and defines its HSV values
 def getHSV(pixelArr):
-    averageH = 0
-    averageS = 0
-    averageV = 0
-    averageHSV = []
+    averageH = []
+    averageS = []
+    averageV = []
+    HSVArr = []
     for i in pixelArr:
         rPrime = i.R/255
         gPrime = i.G/255
@@ -110,35 +111,71 @@ def getHSV(pixelArr):
         i.getV(V)
 
         #add it to the average
-        averageH += H
-        averageS += S
-        averageV += V
+        averageH.append(H)
+        averageS.append(S)
+        averageV.append(V)
 
-    #get the average HSV values
+    #how many values
+    num = 10
+    #get the most common HSV values
+    averageH = Counter(averageH)
+    averageS = Counter(averageS)
+    averageV = Counter(averageV)
     #then put those values into the array
-    totalPixels = len(pixelArr)
-    averageH = averageH/totalPixels
-    averageHSV.append(averageH)
-    averageS = averageS/totalPixels
-    averageHSV.append(averageS)
-    averageV = averageV/totalPixels
-    averageHSV.append(averageV)
+    averageH = averageH.most_common(num)
+    averageS = averageS.most_common(num)
+    averageV = averageV.most_common(num)
+    #put those values into pixels
+    for i in range(num):
+        newPixel = Pixel()
+        #get the HSV values
+        newPixel.getH(averageH[i][0])
+        newPixel.getS(averageS[i][0])
+        newPixel.getV(averageV[i][0])
+        #append new pixel object to pixelArr
+        HSVArr.append(newPixel)
+    #return the arry of most common pixels    
+    return HSVArr
 
-    #print(averageHSV)
-    return averageHSV
 
-
-#takes in the averageHSV array
+#takes in the averageHSV array, which is 3(?) most common pixels/colors
 #returns a weight of 1 (sad), 2 (vibe), 3 (happy)
 def getWeight(HSVArr):
     weight = 0
-    if HSVArr[2] < .4: #V < .4
-        weight = 1
-    elif HSV[1] < .4: #V >= .4 && S < .4
-        weight = 2
+    totalPixels = len(HSVArr)
+    aveH = 0
+    aveS = 0
+    aveV = 0
+    for i in range(totalPixels):
+        aveH += HSVArr[i].H
+        aveS += HSVArr[i].S
+        aveV += HSVArr[i].V
+    aveH = aveH/totalPixels
+    aveS = aveS/totalPixels
+    aveV = aveV/totalPixels
+    print(aveH, aveS, aveV)
+    if aveV <= .2 and aveS <= .4:
+        weight = 1 #dramatic and slow
+    elif aveV <= .2 and aveS <= .8:
+        weight = 2 #angry and slow
+    elif aveV <= .4 and aveS >= .8 and aveS <= 1:
+        weight = 3 #angry and fast
+    elif aveV <= .4 and aveS >= .2 and aveS <= .8:
+        weight = 4 #sad boi hours
+    elif aveV <= .8 and aveS <= .2:
+        weight = 5 #kinda chill sad
+    elif aveV <= .8 and aveS <= .4:
+        weight = 6 #vibing lofi
+    elif aveV <= .6 and aveS <= 1:
+        weight = 7 #crooners?
+    elif aveV <= .8 and aveS <= 1:
+        weight = 8 #pop/pop rock
+    elif aveV <= 1 and aveS <= .6:
+        weight = 9 #intense pop/pop rap?/happy rock?
     else:
-        weight = 3
-    print(weight)
+        weight = 10 #super fast dance music
+        
+    print(weight)    
     return weight
            
 pixelArr = getRGB(image)
