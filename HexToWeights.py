@@ -3,7 +3,7 @@ import numpy as py
 import cv2
 
 #testing image path
-path = './test.png'
+path = './test.jpg'
 image = cv2.imread(path)
 
 #class of pixel
@@ -68,6 +68,10 @@ def getRGB(image):
 #takes in an array of pixel objects
 #and defines its HSV values
 def getHSV(pixelArr):
+    averageH = 0
+    averageS = 0
+    averageV = 0
+    averageHSV = []
     for i in pixelArr:
         rPrime = i.R/255
         gPrime = i.G/255
@@ -105,6 +109,38 @@ def getHSV(pixelArr):
         i.getS(S)
         i.getV(V)
 
+        #add it to the average
+        averageH += H
+        averageS += S
+        averageV += V
+
+    #get the average HSV values
+    #then put those values into the array
+    totalPixels = len(pixelArr)
+    averageH = averageH/totalPixels
+    averageHSV.append(averageH)
+    averageS = averageS/totalPixels
+    averageHSV.append(averageS)
+    averageV = averageV/totalPixels
+    averageHSV.append(averageV)
+
+    #print(averageHSV)
+    return averageHSV
+
+
+#takes in the averageHSV array
+#returns a weight of 1 (sad), 2 (vibe), 3 (happy)
+def getWeight(HSVArr):
+    weight = 0
+    if HSVArr[2] < .4: #V < .4
+        weight = 1
+    elif HSV[1] < .4: #V >= .4 && S < .4
+        weight = 2
+    else:
+        weight = 3
+    print(weight)
+    return weight
            
 pixelArr = getRGB(image)
-getHSV(pixelArr) 
+HSVArr = getHSV(pixelArr)
+getWeight(HSVArr)
