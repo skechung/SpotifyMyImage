@@ -1,11 +1,13 @@
-
+#import sys
 import numpy as py
 import cv2
+import math
+import statistics
 from collections import Counter
 
-#testing image path
-path = './test.jpg'
-image = cv2.imread(path)
+#takes in the image name as the first command
+#path = sys.argv[1]
+#image = cv2.imread(path)
 
 #class of pixel
 class Pixel():
@@ -120,18 +122,19 @@ def getHSV(pixelArr):
     #get the most common HSV values
     averageH = Counter(averageH)
     averageS = Counter(averageS)
+    skewedV = statistics.mean(averageV)+max(averageV)
     averageV = Counter(averageV)
     #then put those values into the array
     averageH = averageH.most_common(num)
     averageS = averageS.most_common(num)
     averageV = averageV.most_common(num)
     #put those values into pixels
-    for i in range(num):
+    for i in range(len(averageH)):
         newPixel = Pixel()
         #get the HSV values
         newPixel.getH(averageH[i][0])
         newPixel.getS(averageS[i][0])
-        newPixel.getV(averageV[i][0])
+        newPixel.getV((averageV[i][0]+skewedV)/3)
         #append new pixel object to pixelArr
         HSVArr.append(newPixel)
     #return the arry of most common pixels    
@@ -151,33 +154,42 @@ def getWeight(HSVArr):
         aveS += HSVArr[i].S
         aveV += HSVArr[i].V
     aveH = aveH/totalPixels
-    aveS = aveS/totalPixels
-    aveV = aveV/totalPixels
-    print(aveH, aveS, aveV)
-    if aveV <= .2 and aveS <= .4:
-        weight = 1 #dramatic and slow
-    elif aveV <= .2 and aveS <= .8:
-        weight = 2 #angry and slow
-    elif aveV <= .4 and aveS >= .8 and aveS <= 1:
-        weight = 3 #angry and fast
-    elif aveV <= .4 and aveS >= .2 and aveS <= .8:
-        weight = 4 #sad boi hours
+    buffer = 0
+    #.1*(math.cos(aveH)+1)
+    aveS = (aveS/totalPixels)
+    aveV = (aveV/totalPixels) + buffer
+    
+    if aveV <= .2:
+        weight = 1 #???
+        
+    elif aveV <= .5 and aveS <= .2:
+        weight = 2 #??
+        
+    elif aveV <= .5 and aveS <= .6:
+        weight = 3 #??
+    
+    elif aveV <= .5 and aveS <= 1:
+        weight = 4 #
+        
     elif aveV <= .8 and aveS <= .2:
         weight = 5 #kinda chill sad
-    elif aveV <= .8 and aveS <= .4:
+        
+    elif aveV <= .8 and aveS <= .6:
         weight = 6 #vibing lofi
-    elif aveV <= .6 and aveS <= 1:
-        weight = 7 #crooners?
+        
     elif aveV <= .8 and aveS <= 1:
-        weight = 8 #pop/pop rock
+        weight = 7 #crooners?
+        
     elif aveV <= 1 and aveS <= .6:
+        weight = 8 #pop/pop rock
+        
+    elif aveV <= .9:
         weight = 9 #intense pop/pop rap?/happy rock?
+        
     else:
         weight = 10 #super fast dance music
         
-    print(weight)    
+    #print(weight)    
     return weight
            
-pixelArr = getRGB(image)
-HSVArr = getHSV(pixelArr)
-getWeight(HSVArr)
+
