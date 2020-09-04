@@ -1,4 +1,3 @@
-#import sys
 import numpy as py
 import cv2
 import math
@@ -191,5 +190,3 @@ def getWeight(HSVArr):
         
     #print(weight)    
     return weight
-           
-

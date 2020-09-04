@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import HexToWeights
 import json
 import sys
@@ -10,12 +7,19 @@ import requests
 import datetime
 from urllib.parse import urlencode
 
+#path = "Images\Carolyn5.PNG"#sys.argv[1]
+#image = cv2.imread(path)
 #takes in the image name as the first command
-path = sys.argv[1]
-image = cv2.imread(path)
+def getImageProperly(ImageFile):
+    print(ImageFile)
+    image = cv2.imread(ImageFile)
+    #cv2.imshow('image',image)
+    return image
 
-client_id ='979a863072334960959d826594c0d65d'
-client_secret = #client secret goes here!
+
+
+client_id ='30d402e9b7a8414d82da0ffe3135c610'
+client_secret = 'cd255070e8614c53aa0529156bf1d8b0'
 
 
 # declare class
@@ -170,13 +174,14 @@ spotify = SpotifyAPI(client_id, client_secret)
 #spotify.get_artist("6XyY86QOPPrYVGvF9ch6wz")
 
 #spotify.get_tracks("2nLtzopw4rPReszdYBJU6h")
-w = getWeight(image)
-outF = open("json_output.txt", "w")
-output = spotify.wTrack(w)
-json.dump(output, outF)
-outF.close()
 
+#w = getWeight(image)
+def createSpotifyObj(client_idx,client_secrety):
+   myObject = SpotifyAPI(client_idx,client_secret)
+   return myObject
 
-
-
-
+def createJson(spotifyThing,weight_of_image):
+    outF = open("json_output.txt", "w")
+    output = spotify.wTrack(w)
+    json.dump(output, outF)
+    outF.close()
