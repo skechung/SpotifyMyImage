@@ -1,0 +1,15 @@
+#song_info{
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#userImage{
+    border-style:dashed;
+    border-width: 10px;
+    padding: 5px;
+}
+
+#spotifyPlayer{
+    position: relative; left:1000px;
+    padding: 5px;
+}
