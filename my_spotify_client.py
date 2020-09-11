@@ -7,19 +7,12 @@ import requests
 import datetime
 from urllib.parse import urlencode
 
-#path = "Images\Carolyn5.PNG"#sys.argv[1]
-#image = cv2.imread(path)
-#takes in the image name as the first command
+client_id = #Please add your own client_id!
+client_secret = #Please add your own client_secret here!
+
 def getImageProperly(ImageFile):
-    print(ImageFile)
     image = cv2.imread(ImageFile)
-    #cv2.imshow('image',image)
     return image
-
-
-
-client_id ='30d402e9b7a8414d82da0ffe3135c610'
-client_secret = 'cd255070e8614c53aa0529156bf1d8b0'
 
 
 # declare class
@@ -125,7 +118,6 @@ class SpotifyAPI(object):
             return {}
         return r.json()
     
-        #takes in integer w weight from 1 to 10    
     def wTrack(self, w):
         _id = 0
         if w == 1:
@@ -160,28 +152,19 @@ class SpotifyAPI(object):
             _id = "7MwwPyZJ7UKFROj2oVnH6R"      
         return self.get_tracks(_id)
 
-#this function calls the function in HexToWeights
-#takes in the path
-#returns back the weight
 def getWeight(image):
     pixelArr = HexToWeights.getRGB(image)
     HSVArr = HexToWeights.getHSV(pixelArr)
     return HexToWeights.getWeight(HSVArr)
 
 spotify = SpotifyAPI(client_id, client_secret)
-#spotify.search("Caramelldansen", search_type="track")
 
-#spotify.get_artist("6XyY86QOPPrYVGvF9ch6wz")
-
-#spotify.get_tracks("2nLtzopw4rPReszdYBJU6h")
-
-#w = getWeight(image)
 def createSpotifyObj(client_idx,client_secrety):
    myObject = SpotifyAPI(client_idx,client_secret)
    return myObject
 
 def createJson(spotifyThing,weight_of_image):
     outF = open("json_output.txt", "w")
-    output = spotify.wTrack(w)
+    output = spotify.wTrack(weight_of_image)
     json.dump(output, outF)
     outF.close()

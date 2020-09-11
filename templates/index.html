@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
+    <link rel="stylesheet" type="text/css" href="static\index.css"
 </head>
 <body>
-    <p>
-       You are currently listening to {{song_title}} by {{song_artist}}. {{user_image}}
-    </p>
+    <div id="song_info">
+       You are currently listening to {{song_title}} by {{song_artist}}.
+    </div>
+    <div id = "userImage">
+        <img src ="{{url_for('static',filename = image_name)}}">
+    </div>
+    <div id="spotifyPlayer">
+        <iframe src="https://open.spotify.com/embed/track/{{Spotify_Player}}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
 </body>
 </html>

@@ -9,8 +9,8 @@ import json
 from werkzeug.utils import secure_filename
 from flask import Flask,render_template,request,redirect,url_for
 
-client_id ='30d402e9b7a8414d82da0ffe3135c610'
-client_secret = 'cd255070e8614c53aa0529156bf1d8b0'
+client_id = #Please add your own client_id!
+client_secret = #Please add your own client_secret here!
 
 #ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
@@ -46,11 +46,8 @@ def upload():
     #dirs = os.listdir(path) #go in directory
     print(OutputArr)
     #Renders the html page, each parameter fits in Jinja2 syntax
-    return render_template("index.html",song_title = OutputArr[0],song_artist = OutputArr[1],image_name=filename)
+    return render_template("index.html",song_title = OutputArr[0],song_artist = OutputArr[1],image_name=filename,Spotify_Player = OutputArr[2])
 
-#def jsonParser(jsonFile):
- #   parseFile = json.loads(jsonFile)
-    #We don't actually need to do this
 def processRequest(Image):
     InfoArr = []
     #Passes the image through for processing
@@ -67,25 +64,9 @@ def processRequest(Image):
         parseThrough = json.loads(fin.read())
         songParse = parseThrough["name"]
         artistParse = parseThrough["album"]["artists"][0]["name"]
-        
+        songID = parseThrough["id"]
         InfoArr.append(songParse)
         InfoArr.append(artistParse)
+        InfoArr.append(songID)
 
     return InfoArr
-"""
-#We have the userImage from the submission
-    #userImage = request.files['UserImage'] 
-    #Passes the image through for processing
-    passImage = my_spotify_client.getImageProperly(userImage)
-    #Creates Spotify Obj
-    mySpotifyObj = my_spotify_client.createSpotifyObj(client_id,client_secret)
-    #Get's the Images weight
-    getWeightImage = my_spotify_client.getWeight(passImage)
-    #Creates the jsonFile 
-    songInfo = my_spotify_client.createJson(mySpotifyObj,getWeightImage)
-    #Parses the info of the jsonFile
-    #jsonParser(songInfo)
-    parseThrough = json.loads(songInfo)
-
-    return render_template('index.html')
-    """

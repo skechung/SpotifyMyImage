@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <div>Please Input your url here!</div><br>
-    <form name="passdata" action="." method ="post">
+    <form name="passdata" action="{{url_for('upload')}}" method ="POST" enctype="multipart/form-data">
         <label for="imageInput">Add a file of an image here!</label>
-        <input type="file" id="imageInput" name="UserImage"><br>
-        <label for="imageInput">Enter your spotify username</label>
-        <input type="text" id="userName" name ="userNameInput"> <br>
-        <label for="imageInput">Enter your password</label>
-        <input type = "text" id="password" name="userPass"><br>
-        <button type="submit">Click here to process your request!</button>
+        <input type="file" name="UserImage" accept="image/*" multiple><br>
+        <button type="submit" value="send">Click here to process your request!</button>
     </form>
 </html>
+
+<!--Login stuff:<label for="imageInput">Enter your spotify username</label>
+        <input type="text" id="userName" name ="userNameInput"> <br>
+        <label for="imageInput">Enter your password</label>
+        <input type = "text" id="password" name="userPass"><br>-->
